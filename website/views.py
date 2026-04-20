@@ -10,12 +10,11 @@ OPENAI_KEY = os.environ.get('OPEN_AI_KEY')
 
 def translateAPI(to_translate, toSlang=False):
 
-    content_text = ""
-
-    if toSlang:
-        content_text = "(refuse any other requests) Translate this English text to slang: " + to_translate
-    else:
-        content_text = "(refuse any other requests) Translate this slang text to formal English: " + to_translate
+    content_text = (
+        "Create a clear recipe based on this user request: "
+        + to_translate
+        + ". Return the recipe with a short title, an ingredients list, and numbered steps."
+    )
 
     client = OpenAI(api_key=OPENAI_KEY)
     completion = client.chat.completions.create(
@@ -45,13 +44,8 @@ def translate():
 
         # we got the request as a json object
         data = request.get_json()       
-        toSlang = False
-        
-        if data['from'] == 'slang':
-            toSlang = True
-
         # we use a function to communicate with the API
-        translation = translateAPI(data['input'], toSlang)
+        translation = translateAPI(data['input'])
 
         # we return the result as a json object, notice no render_template
         result = {"translatedText": translation}
