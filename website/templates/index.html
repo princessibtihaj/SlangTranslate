@@ -17,7 +17,7 @@
                 <textarea class="form-control" id="inputText" rows="4" placeholder="pancakes"></textarea>
             </div>
             <div class="d-grid gap-2 mb-3">
-                <button class="btn btn-primary" onclick="translateText()">Generate Recipe</button>
+                <button class="btn btn-primary" onclick="generateRecipe()">Generate Recipe</button>
             </div>
             <div class="border p-3 bg-white" id="outputText">
                 Recipe output will appear here.
@@ -26,7 +26,7 @@
     </div>
 
     <script>
-        function translateText() {
+        function generateRecipe() {
             let input = document.getElementById("inputText").value;
             let output = document.getElementById("outputText");
             if (input.trim() === "") {
@@ -34,7 +34,7 @@
                 return;
             }
             // use fetch to send the input text to the server
-            fetch("/translate", {
+            fetch("/recipe", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -45,9 +45,9 @@
             })
             .then(response => response.json())
 
-            // update the output text with the translated text
+            // update the output text with the generated recipe
             .then(data => {
-                output.innerText = data.translatedText;
+                output.innerText = data.recipeText;
             })
             .catch(error => {
                 output.innerText = "An error occurred. Please try again.";
